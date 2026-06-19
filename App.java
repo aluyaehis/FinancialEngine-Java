@@ -38,17 +38,14 @@ public class App {
         public void handle(HttpExchange exchange) throws IOException {
             String jsonResponse = "[\n";
             
-            // 1. Define our professional raw SQL query string
             String sqlQuery = "SELECT id, description, amount, status FROM proposals";
 
-            // 2. Open our secure database resources using a try-with-resources block
             try (Connection conn = DatabaseConnection.getConnection();
                  PreparedStatement stmt = conn.prepareStatement(sqlQuery);
                  ResultSet rs = stmt.executeQuery()) {
                 
                 boolean isFirstElement = true;
 
-                // 3. Loop through the rows fetched directly out of your MySQL Workbench
                 while (rs.next()) {
                     if (!isFirstElement) {
                         jsonResponse += ",\n";
@@ -59,7 +56,6 @@ public class App {
                     double amount = rs.getDouble("amount");
                     String status = rs.getString("status");
 
-                    // Map the database columns to JSON values cleanly
                     jsonResponse += "  {\n" +
                                     "    \"id\": " + id + ",\n" +
                                     "    \"description\": \"" + description + "\",\n" +
